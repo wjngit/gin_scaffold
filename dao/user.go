@@ -20,7 +20,7 @@ type User struct {
 	Age       int       `json:"age" gorm:"column:age"`
 	Birth     string    `json:"birth" gorm:"column:birth"`
 	Sex       int       `json:"sex" gorm:"column:sex"`
-	UpdatedAt time.Time `json:"update_at" gorm:"column:update_at"" description:"更新时间"`
+	UpdatedAt time.Time `json:"update_at" gorm:"column:update_at" description:"更新时间"`
 	CreatedAt time.Time `json:"create_at" gorm:"column:create_at" description:"创建时间"`
 }
 
