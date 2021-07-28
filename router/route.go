@@ -24,6 +24,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	demo.Use(
 		middleware.RecoveryMiddleware(),
 		middleware.RequestLog(),
+		middleware.CorsMiddleware(),
 		middleware.IPAuthMiddleware(),
 		middleware.TranslationMiddleware())
 	{
@@ -39,6 +40,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		sessions.Sessions("my_session", store),
 		middleware.RecoveryMiddleware(),
 		middleware.RequestLog(),
+		middleware.CorsMiddleware(),
 		middleware.IPAuthMiddleware(),
 		middleware.TranslationMiddleware())
 	{
@@ -51,6 +53,7 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		sessions.Sessions("my_session", store),
 		middleware.RecoveryMiddleware(),
 		middleware.RequestLog(),
+		middleware.CorsMiddleware(),
 		middleware.SessionAuthMiddleware(),
 		middleware.TranslationMiddleware())
 	{
