@@ -16,4 +16,4 @@
 
 .idea/
 .logs/
-requirements.txt
+.DS_Store
