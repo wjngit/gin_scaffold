@@ -5,28 +5,38 @@ import (
 	"gin_scaffold/middleware"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 	router := gin.Default()
 	router.Use(middlewares...)
+
+	//test接口
 	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 
 	//demo
-	v1 := router.Group("/demo")
-	v1.Use(middleware.RecoveryMiddleware(), middleware.RequestLog(), middleware.IPAuthMiddleware(), middleware.TranslationMiddleware())
+	demo := router.Group("/demo")
+	demo.Use(
+		middleware.RecoveryMiddleware(),
+		middleware.RequestLog(),
+		middleware.IPAuthMiddleware(),
+		middleware.TranslationMiddleware())
 	{
-		controller.DemoRegister(v1)
+		controller.DemoRegister(demo)
 	}
 
-	//非登陆接口
+	//session store
 	store := sessions.NewCookieStore([]byte("secret"))
-	apiNormalGroup := router.Group("/api")
-	apiNormalGroup.Use(sessions.Sessions("mysession", store),
+
+	//非登录接口
+	apiNormalGroup := router.Group("/apiNormal")
+	apiNormalGroup.Use(
+		sessions.Sessions("my_session", store),
 		middleware.RecoveryMiddleware(),
 		middleware.RequestLog(),
 		middleware.IPAuthMiddleware(),
@@ -35,10 +45,10 @@ func InitRouter(middlewares ...gin.HandlerFunc) *gin.Engine {
 		controller.ApiRegister(apiNormalGroup)
 	}
 
-	//登陆接口
-	apiAuthGroup := router.Group("/api")
+	//登录接口
+	apiAuthGroup := router.Group("/apiAuth")
 	apiAuthGroup.Use(
-		sessions.Sessions("mysession", store),
+		sessions.Sessions("my_session", store),
 		middleware.RecoveryMiddleware(),
 		middleware.RequestLog(),
 		middleware.SessionAuthMiddleware(),
